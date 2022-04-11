@@ -107,7 +107,7 @@ export default function Home() {
   useEffect(() => {
     const provider = window.localStorage.getItem("provider");
     if (provider) activate(connectors[provider]);
-  }, []);
+  }, [activate]);
 
   return (
     <>
