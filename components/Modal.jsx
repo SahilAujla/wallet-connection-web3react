@@ -15,7 +15,21 @@ import {
   import { connectors } from "./connectors";
   
   export default function SelectWalletModal({ isOpen, closeModal }) {
+
     const { activate } = useWeb3React();
+
+    const switchToMainnet = async () => {
+      window.ethereum.request({
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_switchEthereumChain",
+        "params": [
+          {
+            "chainId": "0x1",
+          }
+        ]
+      });
+    }
   
     const setProvider = (type) => {
       window.localStorage.setItem("provider", type);
@@ -35,29 +49,10 @@ import {
             <VStack>
               <Button
                 variant="outline"
-                onClick={() => {
-                  activate(connectors.walletConnect);
-                  setProvider("walletConnect");
-                  closeModal();
-                }}
-                w="100%"
-              >
-                <HStack w="100%" justifyContent="center">
-                  <Image
-                    src="/wc.png"
-                    alt="Wallet Connect Logo"
-                    width={26}
-                    height={26}
-                    borderRadius="3px"
-                  />
-                  <Text>Wallet Connect</Text>
-                </HStack>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  activate(connectors.injected);
+                onClick={async () => {
+                  await activate(connectors.injected);
                   setProvider("injected");
+                  await switchToMainnet();
                   closeModal();
                 }}
                 w="100%"
@@ -71,6 +66,27 @@ import {
                     borderRadius="3px"
                   />
                   <Text>Metamask</Text>
+                </HStack>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  await activate(connectors.walletConnect);
+                  setProvider("walletConnect");
+                  await switchToMainnet();
+                  closeModal();
+                }}
+                w="100%"
+              >
+                <HStack w="100%" justifyContent="center">
+                  <Image
+                    src="/wc.png"
+                    alt="Wallet Connect Logo"
+                    width={26}
+                    height={26}
+                    borderRadius="3px"
+                  />
+                  <Text>Wallet Connect</Text>
                 </HStack>
               </Button>
             </VStack>
