@@ -119,7 +119,7 @@ export default function Home() {
             fontSize={["1.5em", "2em", "3em", "4em"]}
             fontWeight="600"
           >
-            Let's connect with
+            Let&apos;s connect with
           </Text>
           <Text
             margin="0"
