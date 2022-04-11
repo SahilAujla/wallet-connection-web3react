@@ -53,8 +53,10 @@ import {
                   await activate(connectors.injected);
                   setProvider("injected");
                   await switchToMainnet();
+                  setTimeout(() => {
+                    document.location.reload();
+                  }, 100);
                   closeModal();
-                  document.location.reload();
                 }}
                 w="100%"
               >
