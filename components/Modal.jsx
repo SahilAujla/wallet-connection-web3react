@@ -54,7 +54,6 @@ import {
                   setProvider("injected");
                   await switchToMainnet();
                   closeModal();
-                  document.location.reload();
                 }}
                 w="100%"
               >
