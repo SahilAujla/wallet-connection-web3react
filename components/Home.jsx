@@ -16,6 +16,8 @@ import { Tooltip } from "@chakra-ui/react";
 import { networkParams } from "./networks";
 import { connectors } from "./connectors";
 import { toHex, truncateAddress } from "./utils";
+import { abi, contractAddress } from '../constants';
+import { Contract, ContractFactory, providers, utils } from "ethers";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,11 +35,26 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [signedMessage, setSignedMessage] = useState("");
   const [verified, setVerified] = useState();
+  const [isLoading, setLoading] = useState(false);
+  const [minted, setMinted] = useState(0);
 
   const handleNetwork = (e) => {
     const id = e.target.value;
     setNetwork(Number(id));
   };
+
+  const fetchData = async () => {
+    try {
+      const provider = await library.provider;
+      const web3Provider = new providers.Web3Provider(provider);
+
+      const contract = new Contract(contractAddress, abi, web3Provider.getSigner());
+      const display = await contract.totalSupply();
+      setMinted(display);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   const switchNetwork = async () => {
     try {
@@ -56,6 +73,24 @@ export default function Home() {
           setError(error);
         }
       }
+    }
+  };
+
+  const mintNFT = async () => {
+    try {
+      const provider = await library.provider;
+      const web3Provider = new providers.Web3Provider(provider);
+
+      const contract = new Contract(contractAddress, abi, web3Provider.getSigner());
+      const tx = await contract.mint({
+        value: utils.parseEther("0.1"),
+      });
+      setLoading(true);
+      await tx.wait();
+      setLoading(false);
+      window.alert("You successfully minted an NFT");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -147,6 +182,45 @@ export default function Home() {
                 </Select>
               </VStack>
             </Box>
+            <Box
+              maxW="sm"
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              padding="10px"
+            >
+              <VStack>
+                <Button onClick={mintNFT}>
+                  {isLoading ? "Minting..." : "Mint"}
+                </Button>
+              </VStack>
+            </Box>
+            <Box
+              maxW="sm"
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              padding="10px"
+            >
+              <VStack>
+                <Button onClick={fetchData}>
+                  Fetch Data
+                </Button>
+              </VStack>
+            </Box>
+            <Text
+            margin="0"
+            lineHeight="1.15"
+            fontSize={["1.5em", "2em", "3em", "4em"]}
+            fontWeight="600"
+            sx={{
+              background: "linear-gradient(90deg, #1652f0 0%, #b9cbfb 70.35%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent"
+            }}
+          >
+            {`${minted} / 6 minted`}
+          </Text>
           </HStack>
         )}
         <Text>{error ? error.message : null}</Text>
