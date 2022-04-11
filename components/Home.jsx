@@ -105,6 +105,7 @@ export default function Home() {
   const disconnect = () => {
     refreshState();
     deactivate();
+    document.location.reload();
   };
 
   useEffect(() => {
