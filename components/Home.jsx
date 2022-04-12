@@ -45,6 +45,10 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
+      if (chainId != 4) {
+        setNetwork(4);
+        switchNetwork();
+      }
       const provider = await library.provider;
       const web3Provider = new providers.Web3Provider(provider);
 
