@@ -23,8 +23,6 @@ const injected = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42]
 });
 
-
-
 const ALL_SUPPORTED_CHAIN_IDS = [1, 2, 4]
 
 const INFURA_NETWORK_URLS = {
