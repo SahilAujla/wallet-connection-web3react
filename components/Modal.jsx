@@ -74,7 +74,6 @@ import {
                   await activate(connectors.walletConnect);
                   setProvider("walletConnect");
                   closeModal();
-                  document.location.reload();
                 }}
                 w="100%"
               >
