@@ -17,7 +17,8 @@ export const truncateAddress = (address) => {
 
 
 export const proof = (address) => {
-  const addresses = ["0x2dA582fee0E7107dcaC20306f2B83509d847E8e2", "0x0968263a92a3B11e0edD1C699f6E7E79406E850A", "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"];
+  // -------------------------------------------------- (Don't even have to do this bit line 20 to 30, because we can just save the roothash after hashing all the 10,000 addresses once, but for now)
+  const addresses = ["0x2dA582fee0E7107dcaC20306f2B83509d847E8e2", "0x0968263a92a3B11e0edD1C699f6E7E79406E850A", "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4", "0x5d933be8925181d2062e6dD1fc36eFb0c409E7Fe"];
 
   // Hash addresses to get the leaves
   let leaves = addresses.map(addr => keccak256(addr));
@@ -27,6 +28,7 @@ export const proof = (address) => {
   // Get root
   let rootHash = merkleTree.getRoot().toString('hex');
 
+  //--------------------------------------------------------------------------------------------------------- 
   // 'Serverside' code
   let hashedAddress = keccak256(address);
   let proof = merkleTree.getHexProof(hashedAddress);
