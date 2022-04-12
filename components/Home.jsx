@@ -18,6 +18,7 @@ import { connectors } from "./connectors";
 import { toHex, truncateAddress } from "./utils";
 import { abi, contractAddress } from '../constants';
 import { Contract, ContractFactory, providers, utils } from "ethers";
+import { proof } from "./utils";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,7 +50,7 @@ export default function Home() {
       console.log({ chainId })
     // connection: {url: 'metamask'}
 
-    if (chainId != 1 && library.connection.url != 'metamask') {
+    if (chainId == 4 && library.connection.url != 'metamask') {
       console.log("###############################################")
       console.log("INSIDE CHAIN ID iS>>>", chainId)
       console.log({ library })
@@ -95,6 +96,10 @@ export default function Home() {
 
   const mintNFT = async () => {
     try {
+      if (!proof(account)) {
+        alert("You are not whitelisted, you can't mint.");
+        return;
+      }
       const provider = await library.provider;
       const web3Provider = new providers.Web3Provider(provider);
 
